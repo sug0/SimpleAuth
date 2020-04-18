@@ -13,6 +13,8 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.samo_lego.simpleauth.SimpleAuth;
+import net.fabricmc.loader.FabricLoader;
+import carpet.patches.EntityPlayerMPFake;
 
 import static net.minecraft.block.NetherPortalBlock.AXIS;
 import static net.minecraft.util.math.Direction.Axis.Z;
@@ -33,6 +35,10 @@ public class AuthEventHandler {
 
     // Player joining the server
     public static void onPlayerJoin(ServerPlayerEntity player) {
+        if (FabricLoader.INSTANCE.isModLoaded("carpet") && player instanceof EntityPlayerMPFake) {
+            return;
+        }
+
         SimpleAuth.deauthenticatePlayer(player);
 
         // Tries to rescue player from nether portal
