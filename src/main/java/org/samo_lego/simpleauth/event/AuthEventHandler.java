@@ -100,7 +100,7 @@ public class AuthEventHandler {
             }
             if(wasSuccessful) {
                 player.teleport(x, y, z);
-                player.sendMessage(successfulPortalRescue);
+                player.sendMessage(successfulPortalRescue, false);
             }
         }
     }
@@ -115,7 +115,7 @@ public class AuthEventHandler {
             !msg.startsWith("/register") &&
             (!SimpleAuth.config.main.allowChat || msg.startsWith("/"))
         ) {
-            player.sendMessage(notAuthenticated());
+            player.sendMessage(notAuthenticated(), false);
             return ActionResult.FAIL;
         }
         return ActionResult.PASS;
@@ -132,7 +132,7 @@ public class AuthEventHandler {
     // Using a block (right-click function)
     public static ActionResult onUseBlock(PlayerEntity player) {
         if(!SimpleAuth.isAuthenticated((ServerPlayerEntity) player) && !SimpleAuth.config.main.allowBlockUse) {
-            player.sendMessage(notAuthenticated());
+            player.sendMessage(notAuthenticated(), false);
             return ActionResult.FAIL;
         }
         return ActionResult.PASS;
@@ -141,7 +141,7 @@ public class AuthEventHandler {
     // Punching a block
     public static ActionResult onAttackBlock(PlayerEntity player) {
         if(!SimpleAuth.isAuthenticated((ServerPlayerEntity) player) && !SimpleAuth.config.main.allowBlockPunch) {
-            player.sendMessage(notAuthenticated());
+            player.sendMessage(notAuthenticated(), false);
             return ActionResult.FAIL;
         }
         return ActionResult.PASS;
@@ -150,7 +150,7 @@ public class AuthEventHandler {
     // Using an item
     public static TypedActionResult<ItemStack> onUseItem(PlayerEntity player) {
         if(!SimpleAuth.isAuthenticated((ServerPlayerEntity) player) && !SimpleAuth.config.main.allowItemUse) {
-            player.sendMessage(notAuthenticated());
+            player.sendMessage(notAuthenticated(), false);
             return TypedActionResult.fail(ItemStack.EMPTY);
         }
 
@@ -159,7 +159,7 @@ public class AuthEventHandler {
     // Dropping an item
     public static ActionResult onDropItem(PlayerEntity player) {
         if(!SimpleAuth.isAuthenticated((ServerPlayerEntity) player) && !SimpleAuth.config.main.allowItemDrop) {
-            player.sendMessage(notAuthenticated());
+            player.sendMessage(notAuthenticated(), false);
             return ActionResult.FAIL;
         }
         return ActionResult.PASS;
@@ -167,7 +167,7 @@ public class AuthEventHandler {
     // Changing inventory (item moving etc.)
     public static ActionResult onTakeItem(PlayerEntity player) {
         if(!SimpleAuth.isAuthenticated((ServerPlayerEntity) player) && !SimpleAuth.config.main.allowItemMoving) {
-            player.sendMessage(notAuthenticated());
+            player.sendMessage(notAuthenticated(), false);
             return ActionResult.FAIL;
         }
 
@@ -176,7 +176,7 @@ public class AuthEventHandler {
     // Attacking an entity
     public static ActionResult onAttackEntity(PlayerEntity player) {
         if(!SimpleAuth.isAuthenticated((ServerPlayerEntity) player) && !SimpleAuth.config.main.allowEntityPunch) {
-            player.sendMessage(notAuthenticated());
+            player.sendMessage(notAuthenticated(), false);
             return ActionResult.FAIL;
         }
 
@@ -185,7 +185,7 @@ public class AuthEventHandler {
     // Interacting with entity
     public static ActionResult onUseEntity(PlayerEntity player) {
         if(!SimpleAuth.isAuthenticated((ServerPlayerEntity) player) && !SimpleAuth.config.main.allowEntityInteract) {
-            player.sendMessage(notAuthenticated());
+            player.sendMessage(notAuthenticated(), false);
             return ActionResult.FAIL;
         }
 

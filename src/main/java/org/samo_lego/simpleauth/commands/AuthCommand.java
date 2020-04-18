@@ -1,7 +1,7 @@
 package org.samo_lego.simpleauth.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
@@ -91,14 +91,14 @@ public class AuthCommand {
     }
     private static int setGlobalPassword(ServerCommandSource source, String pass) {
         // Getting the player who send the command
-        Entity sender = source.getEntity();
+        PlayerEntity sender = (PlayerEntity)source.getEntity();
         // Writing the global pass to config
         SimpleAuth.config.main.globalPassword = AuthHelper.hashPass(pass.toCharArray());
         SimpleAuth.config.main.enableGlobalPassword = true;
         SimpleAuth.config.save(new File("./mods/SimpleAuth/config.json"));
 
         if(sender != null)
-            sender.sendMessage(globalPasswordSet);
+            sender.sendSystemMessage(globalPasswordSet);
         else
             LOGGER.info(SimpleAuth.config.lang.globalPasswordSet);
         return 1;
@@ -108,7 +108,7 @@ public class AuthCommand {
     // Method called for checking the password
     private static int updatePass(ServerCommandSource source, String uuid, String username, String pass) {
         // Getting the player who send the command
-        Entity sender = source.getEntity();
+        PlayerEntity sender = (PlayerEntity)source.getEntity();
 
         SimpleAuth.db.update(
                 uuid,
@@ -116,30 +116,30 @@ public class AuthCommand {
                 AuthHelper.hashPass(pass.toCharArray())
         );
         if(sender != null)
-            sender.sendMessage(userdataUpdated);
+            sender.sendMessage(userdataUpdated, false);
         else
             LOGGER.info(SimpleAuth.config.lang.userdataUpdated);
         // TODO -> Kick player whose name was changed?
         return 1;
     }
     private static int removeAccount(ServerCommandSource source, String uuid, String username) {
-        Entity sender = source.getEntity();
+        PlayerEntity sender = (PlayerEntity)source.getEntity();
         SimpleAuth.db.delete(uuid, username);
 
         // TODO -> Kick player that was unregistered?
 
         if(sender != null)
-            sender.sendMessage(userdataDeleted);
+            sender.sendMessage(userdataDeleted, false);
         else
             LOGGER.info(SimpleAuth.config.lang.userdataDeleted);
         return 1; // Success
     }
     private static int reloadConfig(ServerCommandSource source) {
-        Entity sender = source.getEntity();
+        PlayerEntity sender = (PlayerEntity)source.getEntity();
         SimpleAuth.config = AuthConfig.load(new File("./mods/SimpleAuth/config.json"));
 
         if(sender != null)
-            sender.sendMessage(configurationReloaded);
+            sender.sendMessage(configurationReloaded, false);
         else
             LOGGER.info(SimpleAuth.config.lang.configurationReloaded);
         return 1;
